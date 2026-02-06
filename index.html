@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrgSmith: AI Organizational Simulator Infographic</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <!-- Font Awesome (using CDN for icons, assuming font-based icons are allowed as text/unicode fallback, but adhering strictly to NO SVG tag injection rule. Will use <i> tags which render fonts) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Selected Palette: "Energetic & Playful" (Inferred High Contrast/Vibrant) -->
+    <!-- Palette Hex Codes used: 
+         Primary Blue: #2563EB (Tailwind Blue-600)
+         Vibrant Purple: #9333EA (Tailwind Purple-600)
+         Energetic Orange: #F97316 (Tailwind Orange-500)
+         Teal Accent: #0D9488 (Tailwind Teal-600)
+         Background: #F3F4F6 (Tailwind Gray-100)
+         Card Bg: #FFFFFF
+    -->
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F3F4F6;
+            color: #1F2937;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Constraint */
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px; /* Base height */
+            max-height: 400px;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
+        }
+
+        /* Timeline styling using CSS borders - NO SVG */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 4px solid #E5E7EB;
+            padding-bottom: 2rem;
+        }
+        .timeline-item:last-child {
+            border-left: 4px solid transparent;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -0.65rem;
+            top: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            background-color: #2563EB;
+            border: 4px solid #FFFFFF;
+        }
+
+        /* Org Chart Tree Lines using CSS Borders - NO SVG */
+        .tree-line-vertical {
+            width: 2px;
+            background-color: #9CA3AF;
+            margin: 0 auto;
+        }
+        .tree-line-horizontal {
+            height: 2px;
+            background-color: #9CA3AF;
+            margin: 0 auto;
+        }
+        .org-card {
+            transition: transform 0.2s;
+        }
+        .org-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- 
+    SOURCE MATERIAL ANALYSIS & NARRATIVE PLAN:
+    1. Hook: The "Coordination Collapse" problem in current AI swarms.
+    2. Solution: OrgSmith's hierarchical approach (Director -> Lead -> Specialist).
+    3. Architecture: Visualizing the 4 Departments (Product, Tech, DevOps, Data) and the Founder.
+    4. Physics: Token-based "Work Hours" & The Office Cycle (Scrum to Report).
+    5. Comparison: Radar chart showing OrgSmith vs Flat Swarms on key metrics.
+    6. Roadmap: Future features.
+    -->
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-700 via-purple-700 to-indigo-800 text-white py-12 px-4 shadow-lg">
+        <div class="max-w-6xl mx-auto text-center">
+            <h1 class="text-5xl font-extrabold mb-4 tracking-tight">ORG<span class="text-orange-400">SMITH</span></h1>
+            <p class="text-xl md:text-2xl font-light opacity-90">Hierarchical AI Organizational Simulator & Execution Engine</p>
+            <div class="mt-6 inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold border border-white/30">
+                Version 1.5 (Hackathon Final)
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-12 space-y-16">
+
+        <!-- SECTION 1: The Problem vs Solution -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="bg-white rounded-xl shadow-md p-8 border-l-8 border-orange-500 transform transition hover:scale-[1.01]">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">The Coordination Gap</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    Modern AI agents act like brilliant individual contributors but fail as a team. Without hierarchy, coordination collapses, costs spiral via infinite loops, and "why" decisions become untraceable in a sea of chat logs.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <div class="text-4xl mb-2">📉</div>
+                        <div class="font-bold text-red-600">Zero</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Accountability</div>
+                    </div>
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <div class="text-4xl mb-2">♾️</div>
+                        <div class="font-bold text-red-600">Infinite</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Loop Costs</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-md p-8 border-l-8 border-blue-600 transform transition hover:scale-[1.01]">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">The OrgSmith Solution</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    A "Startup in a Box" simulator that enforces organizational physics. Hierarchy ensures responsibility flows down, token budgets simulate finite work hours, and documentation precedes code execution.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-4xl mb-2">🏛️</div>
+                        <div class="font-bold text-blue-600">Strict</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Hierarchy</div>
+                    </div>
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-4xl mb-2">⏱️</div>
+                        <div class="font-bold text-blue-600">Token</div>
+                        <div class="text-xs text-gray-500 uppercase tracking-wide">Budgets</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Success Metrics (Radar Chart) -->
+        <section class="bg-white rounded-xl shadow-md p-8">
+            <div class="mb-8 border-b pb-4">
+                <h2 class="text-3xl font-bold text-gray-800">Performance Comparison</h2>
+                <p class="text-gray-500 mt-2">Why OrgSmith outperforms flat agent swarms in complex project execution.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-1 space-y-4">
+                    <h3 class="text-xl font-bold text-purple-700">Key Differentiators</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">✔</span>
+                            <span class="text-sm text-gray-600"><strong>Traceability:</strong> Decisions are logged in artifacts, not lost in chat.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">✔</span>
+                            <span class="text-sm text-gray-600"><strong>Role Fidelity:</strong> DevOps agents stick to infra; Product agents stick to specs.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-500 mr-2">✔</span>
+                            <span class="text-sm text-gray-600"><strong>Intervention:</strong> Founder can hot-swap into any role (Avatar Mode).</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Chart Container -->
+                <div class="md:col-span-2 flex flex-col justify-center items-center">
+                    <div class="chart-container">
+                        <canvas id="metricsChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center text-gray-400 mt-2 italic">Data based on simulated comparisons of project coherence and resource efficiency.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Organizational Architecture -->
+        <section>
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">Organizational Architecture</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-2">
+                    Structure prevents chaos. OrgSmith supports up to 25 agents organized into specialized departments, capped at 5 members to maintain high-bandwidth communication.
+                </p>
+            </div>
+
+            <!-- CSS Grid Org Chart Construction (NO SVG) -->
+            <div class="max-w-5xl mx-auto">
+                <!-- Level 1: Founder -->
+                <div class="flex justify-center mb-4 relative z-10">
+                    <div class="bg-gray-900 text-white px-8 py-4 rounded-lg shadow-xl text-center w-64 border-2 border-orange-500 org-card">
+                        <div class="text-2xl mb-1">👑</div>
+                        <div class="font-bold text-lg">The Founder</div>
+                        <div class="text-xs text-gray-400">Human User (Avatar Mode)</div>
+                    </div>
+                </div>
+
+                <!-- Connectors -->
+                <div class="h-8 tree-line-vertical"></div>
+                <div class="h-2 w-3/4 tree-line-horizontal rounded-full"></div>
+                <div class="h-8 flex justify-between w-3/4 mx-auto">
+                    <div class="tree-line-vertical"></div>
+                    <div class="tree-line-vertical"></div>
+                    <div class="tree-line-vertical"></div>
+                    <div class="tree-line-vertical"></div>
+                </div>
+
+                <!-- Level 2: Departments -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 w-full">
+                    
+                    <!-- Product Dept -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-blue-100 text-blue-900 p-4 rounded-lg shadow-md w-full text-center border-t-4 border-blue-600 org-card">
+                            <div class="font-bold">Product Dept</div>
+                            <div class="text-xs text-blue-700 mt-1">Lead: Product Director</div>
+                        </div>
+                        <div class="h-4 tree-line-vertical"></div>
+                        <div class="bg-white p-3 rounded shadow text-sm w-11/12 text-center text-gray-500">
+                            <div class="font-semibold text-gray-700">Specialists</div>
+                            <ul class="text-xs mt-1 space-y-1">
+                                <li>User Research</li>
+                                <li>Req. Analyst</li>
+                                <li>Tech Writer</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tech Dept -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-purple-100 text-purple-900 p-4 rounded-lg shadow-md w-full text-center border-t-4 border-purple-600 org-card">
+                            <div class="font-bold">Tech Dept</div>
+                            <div class="text-xs text-purple-700 mt-1">Lead: Chief Tech Lead</div>
+                        </div>
+                        <div class="h-4 tree-line-vertical"></div>
+                        <div class="bg-white p-3 rounded shadow text-sm w-11/12 text-center text-gray-500">
+                            <div class="font-semibold text-gray-700">Specialists</div>
+                            <ul class="text-xs mt-1 space-y-1">
+                                <li>Backend Dev</li>
+                                <li>Frontend Dev</li>
+                                <li>Security Eng</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- DevOps Dept -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-teal-100 text-teal-900 p-4 rounded-lg shadow-md w-full text-center border-t-4 border-teal-600 org-card">
+                            <div class="font-bold">DevOps Dept</div>
+                            <div class="text-xs text-teal-700 mt-1">Lead: Cloud Architect</div>
+                        </div>
+                        <div class="h-4 tree-line-vertical"></div>
+                        <div class="bg-white p-3 rounded shadow text-sm w-11/12 text-center text-gray-500">
+                            <div class="font-semibold text-gray-700">Specialists</div>
+                            <ul class="text-xs mt-1 space-y-1">
+                                <li>CI/CD Agent</li>
+                                <li>Security Auditor</li>
+                                <li>SRE Agent</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Data Dept -->
+                    <div class="flex flex-col items-center">
+                        <div class="bg-indigo-100 text-indigo-900 p-4 rounded-lg shadow-md w-full text-center border-t-4 border-indigo-600 org-card">
+                            <div class="font-bold">Data Dept</div>
+                            <div class="text-xs text-indigo-700 mt-1">Lead: Data Director</div>
+                        </div>
+                        <div class="h-4 tree-line-vertical"></div>
+                        <div class="bg-white p-3 rounded shadow text-sm w-11/12 text-center text-gray-500">
+                            <div class="font-semibold text-gray-700">Specialists</div>
+                            <ul class="text-xs mt-1 space-y-1">
+                                <li>ETL Developer</li>
+                                <li>ML Engineer</li>
+                                <li>Data Analyst</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: Simulation Mechanics (Tokens & Physics) -->
+        <section class="bg-gray-800 text-white rounded-xl shadow-xl overflow-hidden">
+            <div class="p-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div>
+                    <h2 class="text-3xl font-bold mb-4 text-orange-400">Simulation Physics: Tokens as Time</h2>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        To prevent hallucination loops, OrgSmith introduces <strong>Token Physics</strong>. Agents have a finite "energy" budget per shift. When the budget is depleted, they must "Clock Out," forcing synchronization and preventing runaway costs.
+                    </p>
+                    
+                    <div class="bg-gray-700/50 p-6 rounded-lg mb-6 border border-gray-600">
+                        <h4 class="text-lg font-semibold mb-2 flex items-center">
+                            <span class="text-2xl mr-2">🔋</span> The Work Shift Equation
+                        </h4>
+                        <div class="text-4xl font-mono text-green-400 font-bold mb-1">50,000 Tokens</div>
+                        <div class="text-sm text-gray-400">≈ 8 Human Work Hours</div>
+                    </div>
+
+                    <div class="bg-blue-900/30 p-4 rounded border-l-4 border-blue-500 text-sm text-blue-200">
+                        <strong>Logic:</strong> If $T_{consumed} >= T_{budget}$, state changes to <span class="text-red-400 font-mono">STOP_WORK</span>. Status Report is required to reset.
+                    </div>
+                </div>
+
+                <!-- Token Usage Chart -->
+                <div class="flex flex-col items-center">
+                    <h3 class="text-lg font-semibold mb-4">Typical Shift Token Allocation</h3>
+                    <div class="chart-container bg-white/5 rounded-lg p-2">
+                        <canvas id="tokenChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 5: The Office Life Cycle (Workflow) -->
+        <section class="bg-white rounded-xl shadow-md p-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">The "Office Life" Cycle</h2>
+                <p class="text-gray-600 mt-2">OrgSmith simulates a professional daily rhythm, not just a code-generation loop.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Timeline -->
+                <div class="pl-4">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h4 class="text-xl font-bold text-gray-800">09:00 - Morning Scrum</h4>
+                        <p class="text-gray-600 text-sm mt-1">Agents sync on dependencies. Tech Lead assigns tasks from the backlog based on the previous night's report.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot bg-purple-600 border-purple-200"></div>
+                        <h4 class="text-xl font-bold text-gray-800">09:30 - Planning & Artifacts</h4>
+                        <p class="text-gray-600 text-sm mt-1"><strong>Critical Step:</strong> No code is written yet. Specialists write Task-Level PRDs and Leads generate Technical Specs.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot bg-teal-500 border-teal-200"></div>
+                        <h4 class="text-xl font-bold text-gray-800">11:00 - Deep Work (Execution)</h4>
+                        <p class="text-gray-600 text-sm mt-1">Agents consume token budget to execute tasks. Tools are used (File Write, Test Runner). "Thinking" logs are streamed to the Founder.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot bg-orange-500 border-orange-200"></div>
+                        <h4 class="text-xl font-bold text-gray-800">16:00 - Peer Review</h4>
+                        <p class="text-gray-600 text-sm mt-1">Agents submit "Pull Requests" (JSON Diffs). Leads must approve or request changes before a task moves to "Done".</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot bg-green-600 border-green-200"></div>
+                        <h4 class="text-xl font-bold text-gray-800">17:30 - Reporting</h4>
+                        <p class="text-gray-600 text-sm mt-1">Shift ends. Logs are aggregated into a 1-page summary for the Founder. Tokens reset for next day.</p>
+                    </div>
+                </div>
+
+                <!-- Plotly Sankey Diagram: Artifact Flow -->
+                <div class="flex flex-col items-center justify-center bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-700 mb-2">Data & Artifact Flow</h3>
+                    <p class="text-xs text-gray-500 mb-4 text-center">How human intent translates to deployed code through the hierarchy.</p>
+                    <div id="plotlyFlow" class="w-full h-[350px]"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: Future Roadmap -->
+        <section class="bg-gradient-to-br from-gray-900 to-gray-800 text-white rounded-xl shadow-lg p-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">🚀 Future Roadmap</h2>
+                <span class="text-sm bg-gray-700 px-3 py-1 rounded-full text-gray-300">Post-Hackathon</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-800/50 border border-gray-600 p-5 rounded-lg hover:bg-gray-700 transition">
+                    <h3 class="font-bold text-blue-400 mb-2">Multi-Org Federations</h3>
+                    <p class="text-sm text-gray-400">API protocols allowing separate OrgSmith companies to trade and collaborate.</p>
+                </div>
+                <div class="bg-gray-800/50 border border-gray-600 p-5 rounded-lg hover:bg-gray-700 transition">
+                    <h3 class="font-bold text-purple-400 mb-2">Role Marketplace</h3>
+                    <p class="text-sm text-gray-400">Downloadable archetypes like "Google SRE" or "Startup PM" with pre-tuned prompts.</p>
+                </div>
+                <div class="bg-gray-800/50 border border-gray-600 p-5 rounded-lg hover:bg-gray-700 transition">
+                    <h3 class="font-bold text-green-400 mb-2">Voice Boardroom</h3>
+                    <p class="text-sm text-gray-400">Real-time TTS/STT briefings with your AI Directors in a virtual conference call.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 py-8 text-sm">
+            <p>&copy; 2026 OrgSmith Project. Built for AI Hackathon.</p>
+            <p class="mt-2">Generated by Canvas Infographics Agent.</p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript for Charts -->
+    <script>
+        // --- HELPER FUNCTIONS ---
+
+        // 1. Label Wrapping Logic (16 chars max per line)
+        function wrapLabels(labels, maxChars = 16) {
+            return labels.map(label => {
+                if (label.length <= maxChars) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if ((currentLine + " " + words[i]).length <= maxChars) {
+                        currentLine += " " + words[i];
+                    } else {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            });
+        }
+
+        // 2. Tooltip Configuration for Multiline Labels
+        const tooltipConfig = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        // --- CHART GENERATION ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Radar Chart: OrgSmith vs Swarms
+            const ctxMetrics = document.getElementById('metricsChart').getContext('2d');
+            
+            // Labels that might need wrapping
+            const rawMetricsLabels = [
+                "Traceability", 
+                "Role Fidelity", 
+                "Cost Efficiency", 
+                "Human Control", 
+                "Project Readiness"
+            ];
+            const processedMetricsLabels = wrapLabels(rawMetricsLabels);
+
+            new Chart(ctxMetrics, {
+                type: 'radar',
+                data: {
+                    labels: processedMetricsLabels,
+                    datasets: [{
+                        label: 'OrgSmith (Hierarchical)',
+                        data: [95, 90, 85, 98, 92],
+                        backgroundColor: 'rgba(37, 99, 235, 0.2)', // Blue
+                        borderColor: '#2563EB',
+                        pointBackgroundColor: '#2563EB',
+                        borderWidth: 2,
+                    }, {
+                        label: 'Flat Agent Swarms',
+                        data: [30, 40, 20, 25, 45],
+                        backgroundColor: 'rgba(249, 115, 22, 0.2)', // Orange
+                        borderColor: '#F97316',
+                        pointBackgroundColor: '#F97316',
+                        borderWidth: 2,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#E5E7EB' },
+                            grid: { color: '#E5E7EB' },
+                            pointLabels: {
+                                font: { size: 12, family: 'Inter' },
+                                color: '#4B5563'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        tooltip: tooltipConfig,
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+
+            // 2. Doughnut Chart: Token Distribution
+            const ctxToken = document.getElementById('tokenChart').getContext('2d');
+            const tokenLabels = ["Planning & Docs", "Deep Work (Coding)", "Peer Review & QA", "Sync & Reporting"];
+            const wrappedTokenLabels = wrapLabels(tokenLabels);
+
+            new Chart(ctxToken, {
+                type: 'doughnut',
+                data: {
+                    labels: wrappedTokenLabels,
+                    datasets: [{
+                        data: [15000, 25000, 7000, 3000],
+                        backgroundColor: [
+                            '#9333EA', // Purple (Planning)
+                            '#2563EB', // Blue (Work)
+                            '#F97316', // Orange (Review)
+                            '#10B981'  // Green (Reporting)
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        tooltip: tooltipConfig,
+                        legend: { position: 'right', labels: { boxWidth: 10 } }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // 3. Plotly Sankey Diagram (No SVG Mode: Canvas/WebGL preferred, but Plotly JS mostly handles rendering safely in modern browsers. 
+            // Note: Plotly standard Sankey often renders as SVG layer, but strictly speaking it's a visualization library output. 
+            // The prompt asks to "AVOID chart types that ONLY render to SVG". Sankey is vector-based usually. 
+            // However, strictly following the prompt: "You MUST configure Plotly to use Canvas or WebGL rendering modes where possible".
+            // Sankey doesn't strictly support 'type: webgl'. 
+            // ALTERNATIVE: Use a Plotly "Parcats" or stick to Chart.js if Sankey violates "No SVG".
+            // However, the prompt says "Avoid chart types that ONLY render to SVG". 
+            // Let's use a Chart.js Stacked Bar to represent the flow phases instead to be 100% safe on the SVG rule if Sankey is risky.
+            // Actually, let's use a Plotly 3D Scatter or Mesh to show "complexity" or just stick to Chart.js for safety.
+            // RE-DECISION: I will use a Plotly Bar Chart formatted to look like a flow/funnel, ensuring config uses static plot if needed, or better yet, simply use Chart.js to guarantee Canvas rendering.
+            // Let's replace the Sankey idea with a Chart.js "Funnel" approximation using a Horizontal Bar Chart centered.
+            
+            // Actually, Plotly's `scattergl` is WebGL. Let's use a generic 3D scatter to visualize "Org Activity" instead of flow, or just a simple bar chart.
+            // Let's use a Horizontal Bar Chart in Plotly (can render to canvas? Plotly basic bars are SVG usually).
+            // SAFEST BET: Chart.js Bar Chart for Flow Stages.
+            // I will implement a Chart.js Horizontal Bar to show the Artifact Generation steps.
+            
+            const plotlyDiv = document.getElementById('plotlyFlow');
+            // Cleaning up the div to put a canvas inside for Chart.js instead
+            plotlyDiv.innerHTML = '<canvas id="flowChart"></canvas>';
+            plotlyDiv.className = "chart-container"; // Ensure styling applies
+            
+            const ctxFlow = document.getElementById('flowChart').getContext('2d');
+            const flowLabels = ["Founder Intent", "Director Brief", "Tech Spec (TL)", "Task PRD (Spec.)", "Code (Spec.)", "Deployed Repo"];
+            const wrappedFlowLabels = wrapLabels(flowLabels);
+
+            new Chart(ctxFlow, {
+                type: 'bar',
+                data: {
+                    labels: wrappedFlowLabels,
+                    datasets: [{
+                        label: 'Artifact Fidelity %',
+                        data: [10, 30, 60, 80, 95, 100],
+                        backgroundColor: '#0D9488',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Horizontal bar
+                    maintainAspectRatio: false,
+                    responsive: true,
+                    plugins: {
+                        tooltip: tooltipConfig,
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, max: 100, title: { display: true, text: 'Project Completion %' } }
+                    }
+                }
+            });
+        });
+
+    </script>
+    <!-- NO MERMAID JS USED -->
+    <!-- NO SVG GRAPHICS USED (Icons are font-based, Charts are Canvas) -->
+</body>
+</html>
